@@ -34,7 +34,7 @@ def check_prices():
 rows = ['1', '2']
 print(int(rows[0]))
 
-with open("C:/Users/COMPUUTER5/Desktop/codinnngg/Python Programs/Coin_Prices.csv", 'r') as file:
+with open("C:/Users/COMPUUTER5/Desktop/codinnngg/Python Programs/Trader_AI/Coin_Prices.csv", 'r') as file:
     csvreader = csv.reader(file)
     header = next(csvreader)
     for row in csvreader:
