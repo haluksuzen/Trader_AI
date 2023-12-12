@@ -1,0 +1,25 @@
+<mxfile host="app.diagrams.net" modified="2023-12-11T20:06:55.880Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" etag="RqpSKAFXdRGPwRaFtn8b" version="22.1.7" type="device">
+  <diagram name="Sayfa -1" id="6i_L4pM5sW1-IrOiOULz">
+    <mxGraphModel dx="648" dy="560" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ASvh5vL4p7Dd-Dkji9hU-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="ASvh5vL4p7Dd-Dkji9hU-1" target="ASvh5vL4p7Dd-Dkji9hU-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ASvh5vL4p7Dd-Dkji9hU-1" value="etherium verilerini 5sn aralılar ile&amp;nbsp; al" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="90" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ASvh5vL4p7Dd-Dkji9hU-2" value="excel tablosuna at" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="230" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ASvh5vL4p7Dd-Dkji9hU-4" value="atılan verileri oku ve eğer içerisine ilgili fonksiyona uyan değer var ise güncelle" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="340" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ASvh5vL4p7Dd-Dkji9hU-5" value="güncellenen değerler arasında alım yapıalacksa alım yazddır yanına&lt;br&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="130" y="430" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
