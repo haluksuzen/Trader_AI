@@ -5,6 +5,10 @@ import csv
 import pandas as pd
 import os
 
+# Değişkenler
+list_coindata = []
+last_x_coindata = []
+
 # defining key/request url
 key = "https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT"
 
@@ -17,46 +21,45 @@ def take_data():
     data = requests.get(key)
     data = data.json()
     count = 0
-    with open("Coin_Prices.csv", "a", newline='') as coincsv:
+    with open("C:/Users/COMPUUTER5/Desktop/codinnngg/Python Programs/Trader_AI/Coin_Prices.csv", "a", newline='') as coincsv:
         coin = csv.writer(coincsv)
         coin.writerow([data["price"]])
-        # ,[data["price"]]
+        print(data["price"])
 
-    print(f"{data['symbol']} fiyat : {data['price']}")
-
-
-def check_prices():
-    coinprices = pd.read_csv('sss.csv')
-    print(coinprices)
+# Trendin ne yönde olduğunu hesaplama
 
 
-# csvleri bu şekilde okuyalım pandas şaşırıyor.
-rows = ['1', '2']
-print(int(rows[0]))
+def create_last_x_coindata():
+    counter = 0
 
+    for i in list_coindata:
+        counter += 1
+        print(str(i) + "sdss" + str(len(list_coindata)))
+
+        if counter > len(list_coindata) - 5:
+            last_x_coindata.append(i)
+
+    print(last_x_coindata)
+    return last_x_coindata
+
+
+def what_is_trend():
+    print()
+
+
+# '!!!!!' BOŞ VERİ OLUNCA CSV DE PATLIYOR
+# Coin verilerinin anlık kaydedildiği csv dosyasını açıp, verileri dizi içerisine atıyorum
 with open("C:/Users/COMPUUTER5/Desktop/codinnngg/Python Programs/Trader_AI/Coin_Prices.csv", 'r') as file:
     csvreader = csv.reader(file)
     header = next(csvreader)
     for row in csvreader:
         r = row[0]
         print(float(r[2:]))
-        rows.append(float(r)*float(r))
-# okuduğum değerleri floata çeviriyorum int olmuyor malum uzun değerler olduğu için.
-print(header)
-print(type(rows))
+        list_coindata.append(float(r))
 
+print(list_coindata[5], create_last_x_coindata())
 
-# r = int(rows[5])
-# print(int(rows[5]))
-print(rows)
-
-# print(int(rows[5])*int(rows[6]))
-
-# PANDA İLE OKUMA
-# coin_data = pd.read_csv(
-#     'C:/Users/COMPUUTER5/Desktop/codinnngg/Python Programs/Coin_Prices.csv', encoding="utf-8", low_memory=False)
-
-
+# ANA Döngü
 process_killer = 0
 while True:
 
