@@ -19,7 +19,7 @@ _down = False
 _float_Trend = False
 _up = False
 now = datetime.now()
-son_kacData = 10
+son_kacData = 30
 _cnt_takedCoinData = 0
 # defining key/request url
 key = "https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT"
@@ -69,21 +69,17 @@ def create_last_x_coindata():
 def what_is_trend(coin_dizi):
     counter_down = 0
     counter_float = 0
-    counter_up = 0
+
     # dizinin ilk % x elemeanı düşüyorsa
-    for i in range(1, int((percentage(50, len(coin_dizi))))):
+    for i in range(1, int((percentage(40, len(coin_dizi))))):
         if coin_dizi[i] < coin_dizi[i-1]:
             counter_down += 1
             # print("düşüyor")
     # dizinin son x elemanı düşüyorsa
-    for i in range(int((percentage(50, len(coin_dizi)))), len(coin_dizi)):
+    for i in range(int((percentage(41, len(coin_dizi)))), int((percentage(80, len(coin_dizi))))):
         if coin_dizi[i] >= coin_dizi[i-1]:
             counter_float += 1
             # print("düz gidiyor")
-    # dizinin son x elemanı yükseliş trendindeyse
-    for i in range(int((percentage(50, len(coin_dizi)))), len(coin_dizi)):
-        if coin_dizi[i] > 0.2 + coin_dizi[i-1]:  # 0.5 +
-            counter_up += 1
 
     # %xinden büyükse düşüş var
     if counter_down >= int((percentage(20, len(coin_dizi)))):
@@ -95,15 +91,11 @@ def what_is_trend(coin_dizi):
         global _float_Trend
         _float_Trend = True
 
-    # counter dizinin % xinden büyükse yükseliş trendi döndür
-    if counter_up >= (percentage(20, len(coin_dizi))):
-        global _up
-        _up = True
-
 
 def buy_sell():
     # alınan coin değerlerini çok boyutlu listeden okuyuoruz.
     # alınan coinlerin coountu olmalı yoksa döngüden dolayı patlıyor
+    global taked_coindata
     global _cnt_takedCoinData
     with open("C:/Users/COMPUUTER5/Desktop/codinnngg/Python Programs/Trader_AI/Taked_Coin_Prices.csv", 'r') as file:
         csvreader = csv.reader(file)
@@ -113,7 +105,8 @@ def buy_sell():
             _cnt_takedCoinData += 1
             # print(float(r))
             # print(r)
-            taked_coindata.append(r)
+            if taked_coindata.count(r) == 0:
+                taked_coindata.append(r)
 
     if _down and _float_Trend:  # _down and _float_Trend
         yazabilir = True
@@ -129,9 +122,13 @@ def buy_sell():
                 coin.writerow([last_x_coindata[son_kacData-2], id_generator(),
                                now.strftime("%Y-%m-%d %H:%M:%S")])
 
-    if _up:  # _up
+    if True:  # _up
+        # DEĞİŞİKLİK -> ÖNCEDEN UP DOĞRU İSE SATIM YAPIYORDUK ŞİMDİ ALINANLARDA ŞUANKİ FİYATTAN DÜŞÜK VAR İSE
+        # DİREK SATIYORUZ
         # her seferinde tekrardan okumalıyız satılan coinleri
         read_SelledCoin_Prices()
+
+        global dont_sellinThis
 
         # iki boyutluda istenilen datayı almak ***print(taked_coindata[5][1])
         for i in range(1, _cnt_takedCoinData):
@@ -142,7 +139,9 @@ def buy_sell():
                 for j in range(1, len(selled_coindata)):
                     # düşük coin değeri daha önce satıldıysa ilgili id yi listeye ekle
                     if taked_coindata[i][1] == selled_coindata[j][1]:
-                        dont_sellinThis.append(taked_coindata[i][1])
+                        # basit bir if ile şisme olmaması için var ise eklemiyoruz
+                        if dont_sellinThis.count(taked_coindata[i][1]) == 0:
+                            dont_sellinThis.append(taked_coindata[i][1])
 
                 # daha önce satılanlar listesinde yok ise satılanlara ekle
                 if dont_sellinThis.count(taked_coindata[i][1]) == 0:
@@ -150,6 +149,9 @@ def buy_sell():
                         coin = csv.writer(coincsv)
                         coin.writerow([taked_coindata[i][0], taked_coindata[i][1], last_x_coindata[son_kacData-2],
                                        now.strftime("%Y-%m-%d %H:%M:%S")])
+                        print("Selled...")
+                        print([taked_coindata[i][0], taked_coindata[i][1], last_x_coindata[son_kacData-2],
+                               now.strftime("%Y-%m-%d %H:%M:%S")])
 
 
 def read_SelledCoin_Prices():
@@ -184,25 +186,25 @@ print("Program Loading...")
 
 # ANA Döngü
 while True:
-    time.sleep(10)
+    time.sleep(0.1)
     take_data()
     list_Allcoin_data()
     create_last_x_coindata()
     what_is_trend(last_x_coindata)
     buy_sell()
-    print(_up, _float_Trend, _down)
+    print(_float_Trend, _down)
     print("Cycle : " + str(process_killer))
-
     # değişken resetleme
     _down = False
     _float_Trend = False
-    _up = False
     last_x_coindata = []
+    dont_sellinThis = []
+    taked_coindata = []
+
     _cnt_takedCoinData = 0
     now = datetime.now()
 
-    if process_killer == 18:
+    if process_killer == 10:
         break
 
     process_killer += 1
-    # EN SON ALINANLARI SATARKENKİ SATIŞ FİYATINDA YANLIŞLIK VARDI
