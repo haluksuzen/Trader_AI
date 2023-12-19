@@ -49,6 +49,21 @@ def id_generator(size=10, chars=string.ascii_uppercase + string.digits):
 def percentage(percent, whole):
     return (percent * whole) / 100.0
 # son x datayı alıyor
+# verilen dizideki ilgili eleamnlardaki yüzdesel değişşim
+
+
+def change_percentage(dizi, ilk_kac, son_kac):
+    ilkler = []
+    sonlar = []
+    for i in range(1, ilk_kac):
+        ilkler.append(dizi[i])
+    for i in range(len(dizi) - son_kac, len(dizi)):
+        sonlar.append(dizi[i])
+
+    ilkorta = int(sum(ilkler)/len(ilkler))
+    sonorta = int(sum(sonlar)/len(sonlar))
+
+    return ilkorta, sonorta
 
 
 def create_last_x_coindata():
@@ -81,7 +96,7 @@ def what_is_trend(coin_dizi):
             counter_float += 1
             # print("düz gidiyor")
 
-    # %xinden büyükse düşüş var
+    # %x aşağıda ise düşüş var
     if counter_down >= int((percentage(20, len(coin_dizi)))):
         global _down
         _down = True
@@ -110,6 +125,11 @@ def buy_sell():
 
     if _down and _float_Trend:  # _down and _float_Trend
         yazabilir = True
+        a, b = change_percentage(last_x_coindata, 10, 10)
+
+        if (a - b) < (2*a/100):  # yüzde 2 sinden küçük ise düşüş
+            yazabilir = False
+
         # detaylı bir şekilde alınan coin değerini not ediyoruz x boyutlu listeye
         with open("C:/Users/COMPUUTER5/Desktop/codinnngg/Python Programs/Trader_AI/Taked_Coin_Prices.csv", "a", newline='') as coincsv:
             coin = csv.writer(coincsv)
@@ -134,14 +154,16 @@ def buy_sell():
         for i in range(1, _cnt_takedCoinData):
             # print(taked_coindata[i][1])
             # print(selled_coindata[son_kacData-2][1])
-            # ALINanlar arasında şuadnaki coin verisinden düşük var ise bul
-            if float(taked_coindata[i][0]) < last_x_coindata[son_kacData-2]:
+            # alınanlarda yüzde x den şimmdiki fiyattan düşük var ise sat
+
+            if (float(last_x_coindata[son_kacData-2] - float(taked_coindata[i][0]))) >= float(last_x_coindata[son_kacData-2])/100:
                 for j in range(1, len(selled_coindata)):
                     # düşük coin değeri daha önce satıldıysa ilgili id yi listeye ekle
-                    if taked_coindata[i][1] == selled_coindata[j][1]:
-                        # basit bir if ile şisme olmaması için var ise eklemiyoruz
-                        if dont_sellinThis.count(taked_coindata[i][1]) == 0:
-                            dont_sellinThis.append(taked_coindata[i][1])
+                    # if taked_coindata[i][1] == selled_coindata[j][1]: ---- BOŞ BU YANLIŞ KONTROL
+                    # AMACIM SELLED DATA İN THİS GÜNCELLENDİĞİNDE DONT SELL İNTHİS GÜNCELLEMEK
+                    # basit bir if ile şisme olmaması için var ise eklemiyoruz
+                    if dont_sellinThis.count(selled_coindata[j][1]) == 0:
+                        dont_sellinThis.append(selled_coindata[j][1])
 
                 # daha önce satılanlar listesinde yok ise satılanlara ekle
                 if dont_sellinThis.count(taked_coindata[i][1]) == 0:
@@ -152,6 +174,8 @@ def buy_sell():
                         print("Selled...")
                         print([taked_coindata[i][0], taked_coindata[i][1], last_x_coindata[son_kacData-2],
                                now.strftime("%Y-%m-%d %H:%M:%S")])
+                        print(round(100*(last_x_coindata[son_kacData-2] -
+                              float(taked_coindata[i][0]))/last_x_coindata[son_kacData-2], 3), "Percentage Gain :)")
 
 
 def read_SelledCoin_Prices():
@@ -184,16 +208,19 @@ def list_Allcoin_data():
 process_killer = 0
 print("Program Loading...")
 
+# LARI DİREK ELE ALABİLİRİM
+
 # ANA Döngü
 while True:
     time.sleep(0.1)
-    take_data()
+    # take_data()
     list_Allcoin_data()
     create_last_x_coindata()
     what_is_trend(last_x_coindata)
     buy_sell()
     print(_float_Trend, _down)
     print("Cycle : " + str(process_killer))
+
     # değişken resetleme
     _down = False
     _float_Trend = False
@@ -204,7 +231,7 @@ while True:
     _cnt_takedCoinData = 0
     now = datetime.now()
 
-    if process_killer == 10:
+    if process_killer == 10:  # 7.5SAAT - 870
         break
 
     process_killer += 1
