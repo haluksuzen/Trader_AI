@@ -125,9 +125,9 @@ def buy_sell():
 
     if _down and _float_Trend:  # _down and _float_Trend
         yazabilir = True
-        a, b = change_percentage(last_x_coindata, 10, 10)
+        a, b = change_percentage(last_x_coindata, 10, 4)
 
-        if (a - b) < (2*a/100):  # yüzde 2 sinden küçük ise düşüş
+        if (a - b) < (0.5*a/100):  # yüzde 2 sinden küçük ise düşüş
             yazabilir = False
 
         # detaylı bir şekilde alınan coin değerini not ediyoruz x boyutlu listeye
@@ -141,6 +141,9 @@ def buy_sell():
             if yazabilir:
                 coin.writerow([last_x_coindata[son_kacData-2], id_generator(),
                                now.strftime("%Y-%m-%d %H:%M:%S")])
+                print("Taked...")
+                print(last_x_coindata[son_kacData-2],
+                      now.strftime("%Y-%m-%d %H:%M:%S"))
 
     if True:  # _up
         # DEĞİŞİKLİK -> ÖNCEDEN UP DOĞRU İSE SATIM YAPIYORDUK ŞİMDİ ALINANLARDA ŞUANKİ FİYATTAN DÜŞÜK VAR İSE
@@ -156,7 +159,7 @@ def buy_sell():
             # print(selled_coindata[son_kacData-2][1])
             # alınanlarda yüzde x den şimmdiki fiyattan düşük var ise sat
 
-            if (float(last_x_coindata[son_kacData-2] - float(taked_coindata[i][0]))) >= float(last_x_coindata[son_kacData-2])/100:
+            if (float(last_x_coindata[son_kacData-2] - float(taked_coindata[i][0]))) >= 0.5*float(last_x_coindata[son_kacData-2])/100:
                 for j in range(1, len(selled_coindata)):
                     # düşük coin değeri daha önce satıldıysa ilgili id yi listeye ekle
                     # if taked_coindata[i][1] == selled_coindata[j][1]: ---- BOŞ BU YANLIŞ KONTROL
@@ -212,8 +215,8 @@ print("Program Loading...")
 
 # ANA Döngü
 while True:
-    time.sleep(0.1)
-    # take_data()
+    time.sleep(120)
+    take_data()
     list_Allcoin_data()
     create_last_x_coindata()
     what_is_trend(last_x_coindata)
@@ -231,7 +234,7 @@ while True:
     _cnt_takedCoinData = 0
     now = datetime.now()
 
-    if process_killer == 10:  # 7.5SAAT - 870
+    if process_killer == 60:  # 7.5SAAT - 870
         break
 
     process_killer += 1
