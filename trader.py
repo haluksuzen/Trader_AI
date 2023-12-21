@@ -234,7 +234,7 @@ while True:
     _cnt_takedCoinData = 0
     now = datetime.now()
 
-    if process_killer == 60:  # 7.5SAAT - 870
+    if process_killer == 240:  # 7.5SAAT - 870
         break
 
     process_killer += 1
