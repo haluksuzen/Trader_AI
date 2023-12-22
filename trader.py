@@ -125,10 +125,10 @@ def buy_sell():
 
     if _down and _float_Trend:  # _down and _float_Trend
         yazabilir = True
-        a, b = change_percentage(last_x_coindata, 10, 4)
+        # a, b = change_percentage(last_x_coindata, 10, 4)
 
-        if (a - b) < (0.5*a/100):  # yüzde 2 sinden küçük ise düşüş
-            yazabilir = False
+        # if (a - b) < (0.5*a/100):  # yüzde 2 sinden küçük ise düşüş
+        #     yazabilir = False
 
         # detaylı bir şekilde alınan coin değerini not ediyoruz x boyutlu listeye
         with open("C:/Users/COMPUUTER5/Desktop/codinnngg/Python Programs/Trader_AI/Taked_Coin_Prices.csv", "a", newline='') as coincsv:
@@ -158,8 +158,9 @@ def buy_sell():
             # print(taked_coindata[i][1])
             # print(selled_coindata[son_kacData-2][1])
             # alınanlarda yüzde x den şimmdiki fiyattan düşük var ise sat
+            # 0.5*float(last_x_coindata[son_kacData-2])/100 - yüzde x
 
-            if (float(last_x_coindata[son_kacData-2] - float(taked_coindata[i][0]))) >= 0.5*float(last_x_coindata[son_kacData-2])/100:
+            if (float(taked_coindata[i][0])) < float(last_x_coindata[son_kacData-2]):
                 for j in range(1, len(selled_coindata)):
                     # düşük coin değeri daha önce satıldıysa ilgili id yi listeye ekle
                     # if taked_coindata[i][1] == selled_coindata[j][1]: ---- BOŞ BU YANLIŞ KONTROL
@@ -173,7 +174,8 @@ def buy_sell():
                     with open("C:/Users/COMPUUTER5/Desktop/codinnngg/Python Programs/Trader_AI/Selled_Coin_Prices.csv", "a", newline='') as coincsv:
                         coin = csv.writer(coincsv)
                         coin.writerow([taked_coindata[i][0], taked_coindata[i][1], last_x_coindata[son_kacData-2],
-                                       now.strftime("%Y-%m-%d %H:%M:%S")])
+                                       now.strftime("%Y-%m-%d %H:%M:%S"), round(100*(last_x_coindata[son_kacData-2] -
+                                                                                     float(taked_coindata[i][0]))/last_x_coindata[son_kacData-2], 3)])
                         print("Selled...")
                         print([taked_coindata[i][0], taked_coindata[i][1], last_x_coindata[son_kacData-2],
                                now.strftime("%Y-%m-%d %H:%M:%S")])
@@ -215,7 +217,7 @@ print("Program Loading...")
 
 # ANA Döngü
 while True:
-    time.sleep(120)
+    time.sleep(30)
     take_data()
     list_Allcoin_data()
     create_last_x_coindata()
@@ -234,7 +236,7 @@ while True:
     _cnt_takedCoinData = 0
     now = datetime.now()
 
-    if process_killer == 240:  # 7.5SAAT - 870
+    if process_killer == 840:  # 7.5SAAT - 870
         break
 
     process_killer += 1
